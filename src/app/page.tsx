@@ -1,12 +1,14 @@
 "use client";
 
 
+import { useEffect, useState } from "react";
 import { useStoreGame } from "./store/store";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { name, setName, setGenre, genre } = useStoreGame();
-  console.log(genre);
+  const [isFormValid, setIsFormValid] = useState(false);
+
   
   const route = useRouter();
 
@@ -14,6 +16,9 @@ export default function Home() {
     e.preventDefault();
     const value = e.target.value;
     setName(value);
+    if(value !== ''){
+      setIsFormValid(true);
+    }
   }
 
   function handleClik() {
@@ -23,7 +28,12 @@ export default function Home() {
   function handleSelect (e: any) {
     const value = e.target.value
     setGenre(value)
+    if(value !== ''){
+      setIsFormValid(true);
+    }
   }
+
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <h1 className="pb-[50px] text-3xl text-red-700">RASPADITA APP</h1>
@@ -47,7 +57,7 @@ export default function Home() {
       </form>
       <button
         className="border rounded-2xl bg-[#FF8087] px-6 py-2 mt-[50px]"
-        onClick={handleClik}
+        onClick={handleClik} disabled={!isFormValid}
       >
         Iniciar
       </button>

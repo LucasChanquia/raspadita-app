@@ -70,7 +70,7 @@ function Inicio() {
         const y = e instanceof MouseEvent ? e.clientY - rect.top : e.touches[0].clientY - rect.top;
 
         ctx.globalCompositeOperation = "destination-out";
-        ctx.lineWidth = 30; // Aumentar el grosor del trazo para mejorar el rendimiento
+        ctx.lineWidth = 25; // Aumentar el grosor del trazo para mejorar el rendimiento
         ctx.lineCap = "round";
         ctx.lineTo(x, y);
         ctx.stroke();
