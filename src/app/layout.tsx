@@ -7,9 +7,9 @@ const inter = Pixelify_Sans({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Raspadita App",
   icons:{
-    icon:'../../public/image/icon.ico',
-    shortcut:'../../public/image/icon.ico',
-    apple:'../../public/image/icon.ico'
+    icon:'/Icon.ico',
+    shortcut:'/Icon.ico',
+    apple:'/Icon.ico'
   },
 };
 
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={inter.className}>{children}</body>
     </html>
   );
