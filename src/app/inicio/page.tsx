@@ -18,38 +18,23 @@ function Inicio() {
   const [eraseProgress, setEraseProgress] = useState(0); // Estado para controlar el progreso de borrado
 
   useEffect(() => {
-    if(genre === 'Masculino') {
-      const titleText = `Hola ${nombre}. En este juego vas a tener que raspar rápido con tu dedo el recuadro para descubrir qué hay detrás. ¿Estás listo?`;
-      let index = 0;
-  
-      const intervalId = setInterval(() => {
-        setShowTitle(titleText.substring(0, index + 1));
-        index++;
-  
-        if (index === titleText.length) {
-          clearInterval(intervalId);
-          setShowButton(true);
-        }
-      }, 80);
+    const titleText = genre === 'Masculino' 
+      ? `Hola ${nombre}. En este juego vas a tener que raspar rápido con tu dedo el recuadro para descubrir qué hay detrás. ¿Estás listo?`
+      : `Hola ${nombre}. En este juego vas a tener que raspar con tu dedo el recuadro para descubrir qué hay detrás. ¿Estás lista?`;
 
-      return () => clearInterval(intervalId);
-    } else {
-      const titleText = `Hola ${nombre}. En este juego vas a tener que raspar con tu dedo el recuadro para descubrir qué hay detrás. ¿Estás lista?`;
-      let index = 0;
-  
-      const intervalId = setInterval(() => {
-        setShowTitle(titleText.substring(0, index + 1));
-        index++;
-  
-        if (index === titleText.length) {
-          clearInterval(intervalId);
-          setShowButton(true);
-        }
-      }, 80);
+    let index = 0;
+    const intervalId = setInterval(() => {
+      setShowTitle(titleText.substring(0, index + 1));
+      index++;
 
-      return () => clearInterval(intervalId);
-    }
-  }, [nombre]);
+      if (index === titleText.length) {
+        clearInterval(intervalId);
+        setShowButton(true);
+      }
+    }, 80);
+
+    return () => clearInterval(intervalId);
+  }, [nombre, genre]);
 
   function handleClick() {
     setShowInput(true);
@@ -85,14 +70,15 @@ function Inicio() {
         const y = e instanceof MouseEvent ? e.clientY - rect.top : e.touches[0].clientY - rect.top;
 
         ctx.globalCompositeOperation = "destination-out";
-        ctx.lineWidth = 10; // Grosor del trazo para el borrado (ajusta según necesites)
+        ctx.lineWidth = 30; // Aumentar el grosor del trazo para mejorar el rendimiento
         ctx.lineCap = "round";
         ctx.lineTo(x, y);
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(x, y);
 
-        updateEraseProgress(); // Actualizar el progreso de borrado después de cada trazo
+        // Utilizar requestAnimationFrame para agrupar las actualizaciones
+        requestAnimationFrame(updateEraseProgress);
       };
 
       const updateEraseProgress = () => {
@@ -109,9 +95,9 @@ function Inicio() {
         const progress = (erasedPixels / totalPixels) * 100;
         setEraseProgress(progress);
 
-        if (progress >= 45) {
+        if (progress >= 60) {
           confetti();
-          setImages(true); // Lanzar confetti cuando se borra el 40%
+          setImages(true); // Lanzar confetti cuando se borra el 45%
         }
       };
 
@@ -123,20 +109,22 @@ function Inicio() {
         draw(e);
       };
 
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", stopDrawing);
       canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", handleMouseMove);
+      canvas.addEventListener("mouseup", stopDrawing);
+
       canvas.addEventListener("touchstart", startDrawing);
       canvas.addEventListener("touchmove", handleTouchMove);
-      document.addEventListener("touchend", stopDrawing);
+      canvas.addEventListener("touchend", stopDrawing);
 
       return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", stopDrawing);
         canvas.removeEventListener("mousedown", startDrawing);
+        canvas.removeEventListener("mousemove", handleMouseMove);
+        canvas.removeEventListener("mouseup", stopDrawing);
+
         canvas.removeEventListener("touchstart", startDrawing);
         canvas.removeEventListener("touchmove", handleTouchMove);
-        document.removeEventListener("touchend", stopDrawing);
+        canvas.removeEventListener("touchend", stopDrawing);
       };
     }
   }, [showInput]);
@@ -158,9 +146,9 @@ function Inicio() {
       )}
 
       {showInput && (
-        <div className="shadow-custom w-[70%] h-[350px] flex flex-col m-auto justify-center items-center rounded-lg relative">
-          <p className="text-[40px] font-bold select-none text-black ">¡Felicidades! </p>
-          <p className="text-[40px] font-bold text-center select-none text-black">vas a ser </p>
+        <div className="shadow-custom w-[80%] h-[350px] flex flex-col m-auto justify-center items-center rounded-lg relative">
+          <p className="text-[45px] font-bold select-none text-black">¡Felicidades! </p>
+          <p className="text-[45px] font-bold text-center select-none text-black">vas a ser </p>
           <p className="text-[55px] font-bold text-center select-none text-[#e73941]">{genre === 'Masculino' ? 'TIO ❤️' : 'TIA ❤️'}</p>
           <canvas
             ref={canvasRef}
@@ -180,5 +168,3 @@ function Inicio() {
 }
 
 export default Inicio;
-
-<p >TÍA</p>
