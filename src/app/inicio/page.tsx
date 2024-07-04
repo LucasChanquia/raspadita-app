@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useStoreGame } from "../store/store";
-import confetti from 'canvas-confetti'
+import confetti from 'canvas-confetti';
 import Image from "next/image";
 
 function Inicio() {
-  const { name } = useStoreGame();
+  const { name, genre } = useStoreGame();
   const nombre = name.toLowerCase();
 
   const [showButton, setShowButton] = useState(false);
@@ -14,24 +14,41 @@ function Inicio() {
   const [showTitle, setShowTitle] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDrawing = useRef(false);
-  const [images, setImages] = useState(false)
+  const [images, setImages] = useState(false);
   const [eraseProgress, setEraseProgress] = useState(0); // Estado para controlar el progreso de borrado
 
   useEffect(() => {
-    const titleText = `Hola ${nombre}. En este juego vas a tener que raspar rápido con tu dedo el recuadro para descubrir qué hay detrás. ¿Estás listo/a?`;
-    let index = 0;
+    if(genre === 'Masculino') {
+      const titleText = `Hola ${nombre}. En este juego vas a tener que raspar rápido con tu dedo el recuadro para descubrir qué hay detrás. ¿Estás listo?`;
+      let index = 0;
+  
+      const intervalId = setInterval(() => {
+        setShowTitle(titleText.substring(0, index + 1));
+        index++;
+  
+        if (index === titleText.length) {
+          clearInterval(intervalId);
+          setShowButton(true);
+        }
+      }, 80);
 
-    const intervalId = setInterval(() => {
-      setShowTitle(titleText.substring(0, index + 1));
-      index++;
+      return () => clearInterval(intervalId);
+    } else {
+      const titleText = `Hola ${nombre}. En este juego vas a tener que raspar con tu dedo el recuadro para descubrir qué hay detrás. ¿Estás lista?`;
+      let index = 0;
+  
+      const intervalId = setInterval(() => {
+        setShowTitle(titleText.substring(0, index + 1));
+        index++;
+  
+        if (index === titleText.length) {
+          clearInterval(intervalId);
+          setShowButton(true);
+        }
+      }, 80);
 
-      if (index === titleText.length) {
-        clearInterval(intervalId);
-        setShowButton(true);
-      }
-    }, 20);
-
-    return () => clearInterval(intervalId);
+      return () => clearInterval(intervalId);
+    }
   }, [nombre]);
 
   function handleClick() {
@@ -57,6 +74,7 @@ function Inicio() {
 
       const stopDrawing = () => {
         isDrawing.current = false;
+        ctx.beginPath(); // Resetear el trazo
       };
 
       const draw = (e: MouseEvent | TouchEvent) => {
@@ -91,9 +109,9 @@ function Inicio() {
         const progress = (erasedPixels / totalPixels) * 100;
         setEraseProgress(progress);
 
-        if (progress >= 40) {
+        if (progress >= 50) {
           confetti();
-          setImages(true) // Lanzar confetti cuando se borra el 40% y se revela la palabra "TÍA"
+          setImages(true); // Lanzar confetti cuando se borra el 40%
         }
       };
 
@@ -108,18 +126,20 @@ function Inicio() {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", stopDrawing);
       canvas.addEventListener("mousedown", startDrawing);
-      document.addEventListener("touchmove", handleTouchMove);
+      canvas.addEventListener("touchstart", startDrawing);
+      canvas.addEventListener("touchmove", handleTouchMove);
       document.addEventListener("touchend", stopDrawing);
 
       return () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", stopDrawing);
         canvas.removeEventListener("mousedown", startDrawing);
-        document.removeEventListener("touchmove", handleTouchMove);
+        canvas.removeEventListener("touchstart", startDrawing);
+        canvas.removeEventListener("touchmove", handleTouchMove);
         document.removeEventListener("touchend", stopDrawing);
       };
     }
-  }, [showInput, showTitle]);
+  }, [showInput]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
@@ -141,7 +161,7 @@ function Inicio() {
         <div className="shadow-custom w-[80%] h-[350px] flex flex-col m-auto justify-center items-center rounded-lg relative">
           <p className="text-[45px] font-bold select-none">¡Felicidades! </p>
           <p className="text-[45px] font-bold text-center select-none">vas a ser </p>
-          <p className="text-[55px] font-bold text-center select-none">TÍA</p>
+          <p className="text-[55px] font-bold text-center select-none">{genre === 'Masculino' ? 'TIO' : 'TIA'}</p>
           <canvas
             ref={canvasRef}
             className="canvas"
@@ -160,3 +180,5 @@ function Inicio() {
 }
 
 export default Inicio;
+
+<p >TÍA</p>

@@ -1,13 +1,14 @@
 "use client";
 
+
 import { useStoreGame } from "./store/store";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { name, setName } = useStoreGame();
-  console.log(name);
+  const { name, setName, setGenre, genre } = useStoreGame();
+  console.log(genre);
   
-  const route = useRouter()
+  const route = useRouter();
 
   function handleinput(e: any) {
     e.preventDefault();
@@ -16,13 +17,16 @@ export default function Home() {
   }
 
   function handleClik() {
-    route.push('/inicio')
+    route.push("/inicio");
+  }
+
+  function handleSelect (e: any) {
+    const value = e.target.value
+    setGenre(value)
   }
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <h1 className="pb-[50px] text-3xl text-red-700">
-        RASPADITA APP
-      </h1>
+      <h1 className="pb-[50px] text-3xl text-red-700">RASPADITA APP</h1>
       <form className="flex flex-col gap-2 shadow-custom p-8 rounded-md">
         <label className="text-black ">Ingresá tu nombre:</label>
         <input
@@ -32,8 +36,19 @@ export default function Home() {
           }}
           className="rounded-md bg-transparent border-2 border-[#33366A] border-solid text-gray-950 pl-1"
         ></input>
+        <label>Seleccioná tu genero:</label>
+        <select name="genre" className="rounded-md bg-transparent border-2 border-[#33366A] border-solid text-gray-950 pl-1" onChange={(e)=>{handleSelect(e)}}>
+          <option value="Value1" disabled selected>Genero...</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino" >
+            Femenino
+          </option>
+        </select>
       </form>
-      <button className="border rounded-2xl bg-[#FF8087] px-6 py-2 mt-[50px]" onClick={handleClik}>
+      <button
+        className="border rounded-2xl bg-[#FF8087] px-6 py-2 mt-[50px]"
+        onClick={handleClik}
+      >
         Iniciar
       </button>
     </main>
