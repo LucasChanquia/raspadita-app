@@ -6,7 +6,11 @@ const inter = Pixelify_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Raspadita App",
-  icons:'../../public/image/icon.png',
+  icons:{
+    icon:'../../public/image/icon.png',
+    shortcut:'../../public/image/icon.png',
+    apple:'../../public/image/icon.png'
+  },
 };
 
 export default function RootLayout({
