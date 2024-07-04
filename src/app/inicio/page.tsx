@@ -109,7 +109,7 @@ function Inicio() {
         const progress = (erasedPixels / totalPixels) * 100;
         setEraseProgress(progress);
 
-        if (progress >= 50) {
+        if (progress >= 45) {
           confetti();
           setImages(true); // Lanzar confetti cuando se borra el 40%
         }

@@ -1,18 +1,32 @@
-import { create } from 'zustand'
+import { create } from "zustand";
+import { persist, PersistOptions } from "zustand/middleware";
 
-type store = {
-    name: string
-    genre: 'Masculino' | 'Femenino' | ''
-    setName: (input: string) => void
-    setGenre: (input: string) => void
+type Store = {
+  name: string;
+  genre: "Masculino" | "Femenino" | "";
+  setName: (input: string) => void;
+  setGenre: (input: string) => void;
+};
 
-}
+type MyPersist = (
+  config: (set: any, get: any, api: any) => Store,
+  options: PersistOptions<Store>
+) => (set: any, get: any, api: any) => Store;
 
-export const useStoreGame  = create<store>((set)=> ({
-    name: '',
-    genre: '',
+export const useStoreGame = create<Store>(
+  (persist as MyPersist)(
+    (set) => ({
+      name: "",
+      genre: "",
 
-    setName: (selection: any) => set(state => ({ ...state, name: selection })),
-    setGenre: (selection: any) => set(state => ({ ...state, genre: selection })),
-    
-}))
+      setName: (selection: string) =>
+        set((state: any) => ({ ...state, name: selection })),
+      setGenre: (selection: any) =>
+        set((state: any) => ({ ...state, genre: selection })),
+    }),
+    {
+      name: "game-store", // Nombre de la clave en localStorage
+      getStorage: () => localStorage, // Especificar que use localStorage
+    }
+  )
+);
