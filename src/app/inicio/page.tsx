@@ -158,9 +158,9 @@ function Inicio() {
       )}
 
       {showInput && (
-        <div className="shadow-custom w-[80%] h-[350px] flex flex-col m-auto justify-center items-center rounded-lg relative">
-          <p className="text-[45px] font-bold select-none text-black">¡Felicidades! </p>
-          <p className="text-[45px] font-bold text-center select-none text-black">vas a ser </p>
+        <div className="shadow-custom w-[70%] h-[350px] flex flex-col m-auto justify-center items-center rounded-lg relative">
+          <p className="text-[40px] font-bold select-none text-black ">¡Felicidades! </p>
+          <p className="text-[40px] font-bold text-center select-none text-black">vas a ser </p>
           <p className="text-[55px] font-bold text-center select-none text-[#e73941]">{genre === 'Masculino' ? 'TIO ❤️' : 'TIA ❤️'}</p>
           <canvas
             ref={canvasRef}
