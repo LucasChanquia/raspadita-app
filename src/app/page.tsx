@@ -1,9 +1,11 @@
 "use client";
 
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useStoreGame } from "./store/store";
 import { useRouter } from "next/navigation";
+import { Analytics } from '@vercel/analytics/react';
+
 
 export default function Home() {
   const { name, setName, setGenre, genre } = useStoreGame();
@@ -61,6 +63,7 @@ export default function Home() {
       >
         Iniciar
       </button>
+      <Analytics />
     </main>
   );
 }
